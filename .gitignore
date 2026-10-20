@@ -1,3 +1,2 @@
 models/
-download.log
-pull.log
+*.log
