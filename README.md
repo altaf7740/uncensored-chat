@@ -25,13 +25,16 @@ GPUS=0,1,2,3 ./start.sh     # other GPUs (layers are split across them)
 CTX=131072 ./start.sh       # longer context
 PORT=8091 ./start.sh        # other port
 MODEL=<file>.gguf ./start.sh  # another quant from models/
+UI=builtin ./start.sh       # llama.cpp's own web UI instead of ui/index.html
 ./stop.sh
 docker logs -f qwen36-chat  # logs
 ```
 
-- Web chat: `http://<host>:8090`
+- Web chat: `http://<host>:8090` — `ui/index.html`, a single-file chat page: chat history,
+  streaming, image attachments (paste / drag & drop), collapsible thinking with an on/off
+  toggle, system prompt, temperature and max-token settings. Edit it and reload; no restart needed.
 - API: `http://<host>:8090/v1/chat/completions` (OpenAI-compatible; supports images and `reasoning_effort`)
-- Chats live in the browser (web UI); the server doesn't log prompts.
+- Chats live in the browser's localStorage; the server doesn't log prompts.
 
 Measured on 2× V100-SXM2 32 GB: ~1,050 tok/s prompt processing, ~22 tok/s generation
 (the first request after start is slower while CUDA JIT-compiles kernels).
